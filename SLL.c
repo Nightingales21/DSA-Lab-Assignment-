@@ -107,6 +107,7 @@ void main()
 	printf("\n");
 	Head = InsertBeg(Head, data);
 	print(Head);
+printf("Hello");
 
 }	
 
