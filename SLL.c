@@ -99,6 +99,12 @@ struct Node * DeleteEnd(struct Node *Head,struct Node *temp)
 	return(Head);
 }
 
+struct Node * DeleteBeg(struct Node *Head)
+{
+	Head = Head->Next;
+	return Head;
+}
+
 void main()
 {
 	struct Node *Head = NULL;
@@ -137,6 +143,10 @@ void main()
 
 	printf("\n");
 	Head = DeleteEnd(Head,temp);
+	print(Head);
+
+	printf("\n");
+	Head = DeleteBeg(Head);
 	print(Head);
 }	
 
