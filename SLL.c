@@ -79,6 +79,26 @@ struct Node * InsertBeg(struct Node *Head, int data)
 	Head = nn;
 	return (Head);
 }
+
+struct Node * Delete(struct Node *Head,struct Node *temp, int key)
+{
+	struct Node *previous;
+	for (temp=Head;(temp->Data != key) && (temp!=NULL); temp = temp->Next)
+	{
+		previous = temp;
+	}
+	previous->Next = temp->Next;
+	free(temp);
+	return(Head);
+}
+
+struct Node * DeleteEnd(struct Node *Head,struct Node *temp)
+{
+	for (temp=Head; temp->Next != NULL && temp->Next->Next != NULL; temp=temp->Next);
+	temp->Next = NULL;
+	return(Head);
+}
+
 void main()
 {
 	struct Node *Head = NULL;
@@ -107,7 +127,16 @@ void main()
 	printf("\n");
 	Head = InsertBeg(Head, data);
 	print(Head);
-printf("Hello");
 
+	printf("\n");
+	int key;
+	printf("Enter Key: ");
+	scanf("%d", &key);
+	Head = Delete(Head,temp, key);
+	print(Head);
+
+	printf("\n");
+	Head = DeleteEnd(Head,temp);
+	print(Head);
 }	
 
