@@ -105,6 +105,15 @@ struct Node * DeleteBeg(struct Node *Head)
 	return Head;
 }
 
+void Search(struct Node *Head, struct Node *temp int key)
+{
+	int counter = 0;
+	for(temp=Head; temp->Next 	; counter++)
+	{
+
+
+	
+
 void main()
 {
 	struct Node *Head = NULL;
