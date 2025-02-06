@@ -105,12 +105,21 @@ struct Node * DeleteBeg(struct Node *Head)
 	return Head;
 }
 
-void Search(struct Node *Head, struct Node *temp int key)
+void Search(struct Node *Head, struct Node *temp, int key)
 {
 	int counter = 0;
-	for(temp=Head; temp->Next 	; counter++)
+	for(temp=Head; temp->Next != NULL; counter++)
 	{
-
+		if (temp->Data == key)
+		{
+			printf("The key %d is found at position %d", key, counter+1);
+		}
+	}
+	if (temp->Next == NULL)
+	{
+		printf("The key %d is not found", key);
+	}
+}
 
 	
 
@@ -157,5 +166,10 @@ void main()
 	printf("\n");
 	Head = DeleteBeg(Head);
 	print(Head);
+
+	printf("\n");
+	printf("Enter Key: ");
+	scanf("%d", &key);
+	Search(Head,temp,key);
 }	
 
