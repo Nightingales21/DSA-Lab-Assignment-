@@ -13,7 +13,6 @@ struct Node * create(struct Node *Head, struct Node *temp, int n)
 	{
 		if (Head == NULL)
 		{
-
 			temp=(struct Node *)malloc(sizeof(struct Node));
 			printf("Enter data: %d: ", i+1);
 			scanf("%d", &data);
@@ -46,23 +45,24 @@ void print(struct Node *Head)
 
 struct Node * Insert(struct Node *Head, struct Node *temp, int pos, int data)
 {
+	printf("Executing Insert Function\n");
 	struct Node *nn;
 	int c = 1;
 	for (temp=Head;c<pos;temp = temp->Next)
 	{
 		c++;
 	}
-	nn = (struct Node *)malloc(sizeof(struct Node *));
+	nn = (struct Node *)malloc(sizeof(struct Node));
 	nn->Data = data;
 	nn->Next = temp->Next;
 	temp->Next = nn;
-
 }
 
 struct Node * InsertEnd(struct Node *Head, struct Node *temp, int data)
 {
+	printf("Executing InsertEnd Function\n");
 	struct Node *nn;
-	nn = (struct Node *) malloc(sizeof(struct Node ));
+	nn = (struct Node *) malloc(sizeof(struct Node));
 	nn->Data = data;
 	nn->Next = NULL;
 	for(temp=Head;temp->Next != NULL; temp = temp->Next);
@@ -72,8 +72,9 @@ struct Node * InsertEnd(struct Node *Head, struct Node *temp, int data)
 
 struct Node * InsertBeg(struct Node *Head, int data)
 {
+	printf("Executing InsertBeg Function\n");
 	struct Node *nn;
-	nn = (struct Node *) malloc(sizeof(struct Node ));
+	nn = (struct Node *) malloc(sizeof(struct Node));
 	nn->Data = data;
 	nn->Next = Head;
 	Head = nn;
@@ -82,21 +83,50 @@ struct Node * InsertBeg(struct Node *Head, int data)
 
 struct Node * Delete(struct Node *Head,struct Node *temp, int key)
 {
-	struct Node *previous;
-	for (temp=Head;(temp->Data != key) && (temp!=NULL); temp = temp->Next)
+	printf("Executing Delete Function\n");
+	struct Node *previous = NULL;
+	for (temp=Head; temp!=NULL && temp->Data != key; temp = temp->Next)
 	{
 		previous = temp;
 	}
-	previous->Next = temp->Next;
+	if (temp == NULL)
+		return Head;
+	if (previous != NULL)
+		previous->Next = temp->Next;
+	else
+		Head = temp->Next;
 	free(temp);
 	return(Head);
 }
 
 struct Node * DeleteEnd(struct Node *Head,struct Node *temp)
 {
+	printf("Executing DeleteEnd Function\n");
 	for (temp=Head; temp->Next != NULL && temp->Next->Next != NULL; temp=temp->Next);
 	temp->Next = NULL;
 	return(Head);
+}
+
+struct Node * DeleteBeg(struct Node *Head)
+{
+	printf("Executing DeleteBeg Function\n");
+	Head = Head->Next;
+	return Head;
+}
+
+void Search(struct Node *Head, struct Node *temp, int key)
+{
+	printf("Executing Search Function\n");
+	int counter = 1;
+	for(temp=Head; temp != NULL; temp = temp->Next, counter++)
+	{
+		if (temp->Data == key)
+		{
+			printf("The key %d is found at position %d\n", key, counter);
+			return;
+		}
+	}
+	printf("The key %d is not found\n", key);
 }
 
 void main()
@@ -117,12 +147,12 @@ void main()
 	scanf("%d",&pos);
 
 	printf("\n"); 
-	Insert(Head,temp, pos, 	data);
+	Insert(Head,temp, pos, data);
 	print(Head);
 
 	printf("\n");
 	InsertEnd(Head,temp, data);
-	print(Head);	
+	print(Head);
 
 	printf("\n");
 	Head = InsertBeg(Head, data);
@@ -138,5 +168,13 @@ void main()
 	printf("\n");
 	Head = DeleteEnd(Head,temp);
 	print(Head);
-}	
 
+	printf("\n");
+	Head = DeleteBeg(Head);
+	print(Head);
+
+	printf("\n");
+	printf("Enter Key: ");
+	scanf("%d", &key);
+	Search(Head,temp,key);
+}
