@@ -75,16 +75,50 @@ struct Node * Insert (struct Node *Head,struct Node *temp, int pos)
    return(Head);
 }
 
+struct Node * InsertBegorEnd (struct Node *Head, struct Node *temp)
+{
+    struct Node *nn;
+    int data;
+    for(temp = Head;temp->Next != Head; temp = temp->Next);
+    nn = (struct Node *)malloc(sizeof(struct Node *));
+    printf("Enter data: ");
+	scanf("%d", &data);
+    nn->Data = data;
+    nn->Next = Head;
+    temp->Next = nn;
+    Head = nn;
+    return(Head);
+}
+
+struct Node * Delete (struct Node *Head, struct Node *temp, int pos)
+{
+    temp = Head;
+    struct Node *tnext;
+    tnext = temp -> Next;
+    for(int i=1; i +1 != pos; i++,temp = temp->Next, tnext = tnext->Next);
+    temp->Next = tnext->Next;
+    return(Head);
+}
+
+struct Node * DeleteBegorEnd (struct Node *Head,struct Node *temp)
+{
+   
+    for(temp = Head; temp->Next != Head; temp = temp->Next);
+    Head = Head->Next;
+    temp->Next = Head;
+    return(Head);
+}
+
 
 void main()
 {
     struct Node *Head = NULL;
     struct Node *Temp = NULL;
-    int flag = 0, option,n,pos;
+    int flag = 0, option,n,pos,key;
 
     while (flag ==0)
     {
-        printf("CLL Menu\nChoose an option: ");
+        printf("CLL Menu\n1:Create\n2:Display\n3:Insert\n4:Insert at Beginning or End\n5:Delete\n6:Delete at Beginning or End\nChoose an option: ");
         scanf("%d", &option);
         switch(option)
         {
@@ -107,6 +141,24 @@ void main()
             scanf("%d",&pos);
 
             Head = Insert(Head, Temp,pos);
+            break;
+
+            case 4:
+            Head = InsertBegorEnd(Head, Temp);
+            break;
+
+            case 5:
+            printf("Enter position to Delete: ");
+            scanf("%d",&pos);
+
+            Head = Delete(Head,Temp,pos);
+            break;
+
+            case 6:
+            Head = DeleteBegorEnd(Head, Temp);
+            break;
+
         }
     }
 }
+
