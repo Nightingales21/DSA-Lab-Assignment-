@@ -1,56 +1,95 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 struct Chair
 {
     int Number;
     struct Chair *Next;
-}
+}; 
 
-struct Chair * add(amount, struct Chair *Head, struct Chair Temp)
+struct Chair * add(int amount, struct Chair *Head)
 {
-    struct Chair *NN
-    for(int i=1;i<=amount; i++)
+    struct Chair *Temp, *NN;
+    for (int i = 1; i <= amount; i++)
     {
-        if(Head == NULL)
+        NN = (struct Chair *)malloc(sizeof(struct Chair));
+
+        if (NN == NULL)
         {
-            NN = (struct Chair *)malloc(sizeof(struct Chair *));
-            Temp = NN;
-            Head = NN; 
-            Head->Number = 1;
-        }
-        else
-        {
-            Temp->Next = (struct Chair *)malloc(sizeof(struct Chair *));
-            Temp = Temp->Next;
-            Temp->Data = i;
+            printf("Memory allocation failed!\n");
+            return Head;
         }
 
-        if (i=n)
+        NN->Number = i;
+        NN->Next = NULL;
+
+        if (Head == NULL)
         {
-            Temp->Next= Head;
+            Head = NN;
+            Temp = NN;
         }
         else
         {
-            Temp->Next = NULL;
+            Temp->Next = NN;
+            Temp = NN;
         }
     }
-    return(Head;)
+
+    if (Temp != NULL)
+    {
+        Temp->Next = Head;
+    }
+
+    return Head;
 }
 
-int length(struct Chair *Head, struct Chair *Temp)
+int length(struct Chair *Head)
 {
-    Temp = Head;
-    for (int i=1;Temp->Next!=NULL;Temp =Temp->Next, i++ )
+    if (Head == NULL)
+        return 0;
+
+    int count = 1;
+    struct Chair *Temp = Head;
+    while (Temp->Next != Head)
+    {
+        count++;
+        Temp = Temp->Next;
+    }
+    return count;
+}
+
+void display(struct Chair *Head)
+{
+    if (Head == NULL)
+    {
+        printf("List is empty!\n");
+        return;
+    }
+
+    struct Chair *Temp = Head;
+    do
+    {
+        printf("Chair Number: %d\n", Temp->Number);
+        Temp = Temp->Next;
+    } while (Temp != Head);
 }
 
 void main()
 {
     struct Chair *Head = NULL;
-    struct Chair *Temp = NULL;
     int amount;
 
     printf("Enter the amount of Chairs: ");
-    scanf("%d, &amount");
-    add(amount, Head);
+    scanf("%d", &amount); 
+
+    Head = add(amount, Head);
+
+    printf("Circular Linked List of Chairs:\n");
+    display(Head);
+
+    int randomNumber = (rand() % n) + 1;
+    
+
+    
 }
