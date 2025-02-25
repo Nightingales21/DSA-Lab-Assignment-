@@ -8,19 +8,19 @@ struct Node
     struct Node *Previous;
 };
 
-struct Node * Create(struct Node *Head, struct Node *Temp, int n)
+struct Node * Create(struct Node **pHead, struct Node **pTemp,struct Node **pTail, int n)
 {
     int data;
     for (int i=0; i<n;i++)
     {
-        if (Head == NULL)
+        if (*pHead == NULL)
         {
-            Temp = (struct Node *)malloc(sizeof(struct Node));
-            Temp->Previous = NULL;
+            *pTemp = (struct Node *)malloc(sizeof(struct Node));
+            *pTemp->Previous = NULL;
 
             printf("Enter data: %d: ", i+1);
 			scanf("%d", &data);
-			Temp->Data = data;
+			*pTemp->Data = data;
             
             Head = Temp;
         }
@@ -33,9 +33,12 @@ struct Node * Create(struct Node *Head, struct Node *Temp, int n)
             printf("Enter data: %d: ", i+1);
 			scanf("%d", &data);
 			Temp->Data = data;
+
+            Temp->Next = NULL;
+            Tail = Temp;
             
         }
-        Temp->Next = NULL;
+        
     }
     return(Head);
 }
@@ -53,6 +56,7 @@ void main()
     int flag = 0, option, n;
     struct Node *Head = NULL;
     struct Node *Temp = NULL;
+    struct Node *Tail = NULL;
 
     while (flag == 0)
     {
@@ -74,7 +78,7 @@ void main()
             case 1:
             printf("Enter the number of Nodes to Cretae: ");
             scanf("%d",&n);
-            Create(Head, Temp, n);
+            Create(Head, Temp, Tail, n);
             break;
 
             case 2:

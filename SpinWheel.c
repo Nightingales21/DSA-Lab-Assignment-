@@ -88,7 +88,7 @@ void main()
     printf("Circular Linked List of Chairs:\n");
     display(Head);
 
-    int randomNumber = (rand() % n) + 1;
+    int randomNumber = (rand() % 10) + 1;
     
 
     
