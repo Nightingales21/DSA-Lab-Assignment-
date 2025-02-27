@@ -1,95 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-
-struct Chair
+struct Node
 {
     int Number;
-    struct Chair *Next;
-}; 
+    struct Node *Next;
+};
 
-struct Chair * add(int amount, struct Chair *Head)
+struct Node * Create(struct Node *Head, int n)
 {
-    struct Chair *Temp, *NN;
-    for (int i = 1; i <= amount; i++)
+    struct Node *Temp;
+    int Data;
+    for(int i=1; i<=n; i++)
     {
-        NN = (struct Chair *)malloc(sizeof(struct Chair));
-
-        if (NN == NULL)
-        {
-            printf("Memory allocation failed!\n");
-            return Head;
-        }
-
-        NN->Number = i;
-        NN->Next = NULL;
-
         if (Head == NULL)
         {
-            Head = NN;
-            Temp = NN;
+            Temp = (struct Node *)malloc(sizeof(struct Node));
+            printf("Enter Number %d: ", i);
+            scanf("\n%d",&Data);
+            Temp->Number = Data;
+            Temp->Next = NULL;
+            Head = Temp;
         }
         else
         {
-            Temp->Next = NN;
-            Temp = NN;
+            Temp->Next = (struct Node *)malloc(sizeof(struct Node));
+            printf("Enter Number %d: ", i);
+            scanf("\n%d",&Data);
+            Temp = Temp->Next;
+            Temp->Number = Data;
         }
-    }
-
-    if (Temp != NULL)
-    {
         Temp->Next = Head;
     }
-
-    return Head;
+    return(Head);
 }
 
-int length(struct Chair *Head)
+void Display(struct Node *Head,struct Node *Temp, int n)
 {
-    if (Head == NULL)
-        return 0;
+    Temp=Head;
+    for (int i=0; i<n; Temp=Temp->Next, i++);
+    printf("The data after %d iterations is: %d", n, Temp->Number);
 
-    int count = 1;
-    struct Chair *Temp = Head;
-    while (Temp->Next != Head)
-    {
-        count++;
-        Temp = Temp->Next;
-    }
-    return count;
-}
-
-void display(struct Chair *Head)
-{
-    if (Head == NULL)
-    {
-        printf("List is empty!\n");
-        return;
-    }
-
-    struct Chair *Temp = Head;
-    do
-    {
-        printf("Chair Number: %d\n", Temp->Number);
-        Temp = Temp->Next;
-    } while (Temp != Head);
 }
 
 void main()
 {
-    struct Chair *Head = NULL;
-    int amount;
+    struct Node *Head = NULL;
+    struct Node *Temp = NULL;
+    int n;
 
-    printf("Enter the amount of Chairs: ");
-    scanf("%d", &amount); 
+    printf("Enter the Number of Nodes to create: ");
+    scanf("%d", &n);
+    Head = Create(Head, n);
 
-    Head = add(amount, Head);
+    srand(time(0));
+    int randomNumber = (rand() % (100 - 0 + 1)) + 0;
+    Display(Head,Temp,randomNumber);
 
-    printf("Circular Linked List of Chairs:\n");
-    display(Head);
-
-    int randomNumber = (rand() % 10) + 1;
-    
-
-    
 }
