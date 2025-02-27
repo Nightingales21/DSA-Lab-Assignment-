@@ -100,7 +100,7 @@ struct Node * Delete (struct Node *Head, struct Node *temp, int pos)
     return(Head);
 }
 
-struct Node * DeleteBegorEnd (struct Node *Head,struct Node *temp)
+struct Node * DeleteBeg (struct Node *Head,struct Node *temp)
 {
    
     for(temp = Head; temp->Next != Head; temp = temp->Next);
@@ -109,6 +109,14 @@ struct Node * DeleteBegorEnd (struct Node *Head,struct Node *temp)
     return(Head);
 }
 
+struct Node * DeleteEnd(struct Node *Head,struct Node *temp)
+{
+    struct Node *tnext = NULL;
+    for(temp = Head, tnext = temp->Next; tnext->Next != Head; temp = temp->Next, tnext = tnext->Next);
+    temp->Next = Head;
+    free(tnext);
+    return(Head);
+}
 
 void main()
 {
@@ -118,7 +126,7 @@ void main()
 
     while (flag ==0)
     {
-        printf("CLL Menu\n1:Create\n2:Display\n3:Insert\n4:Insert at Beginning or End\n5:Delete\n6:Delete at Beginning or End\nChoose an option: ");
+        printf("CLL Menu\n1:Create\n2:Display\n3:Insert\n4:Insert at Beginning or End\n5:Delete\n6:Delete at Beginning\n7:Delete at End\nChoose an option: ");
         scanf("%d", &option);
         switch(option)
         {
@@ -155,8 +163,15 @@ void main()
             break;
 
             case 6:
-            Head = DeleteBegorEnd(Head, Temp);
+            Head = DeleteBeg(Head, Temp);
             break;
+
+            case 7:
+            Head = DeleteEnd(Head, Temp);
+            break;
+
+            default:
+            flag = 1;
 
         }
     }

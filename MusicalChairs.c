@@ -1,95 +1,132 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-
-struct Chair
+struct Chair 
 {
     int Number;
     struct Chair *Next;
-}; 
+};
 
-struct Chair * add(int amount, struct Chair *Head)
+
+struct Node * Create(struct Chair *Head, int n)
 {
-    struct Chair *Temp, *NN;
-    for (int i = 1; i <= amount; i++)
+    struct Node *Temp;
+    int Data;
+    for(int i=1; i<=n; i++)
     {
-        NN = (struct Chair *)malloc(sizeof(struct Chair));
-
-        if (NN == NULL)
-        {
-            printf("Memory allocation failed!\n");
-            return Head;
-        }
-
-        NN->Number = i;
-        NN->Next = NULL;
-
         if (Head == NULL)
         {
-            Head = NN;
-            Temp = NN;
+            Temp = (struct Node *)malloc(sizeof(struct Node));
+            Temp->Number = i;
+            Temp->Next = NULL;
+            Head = Temp;
         }
         else
         {
-            Temp->Next = NN;
-            Temp = NN;
+            Temp->Next = (struct Node *)malloc(sizeof(struct Node));
+            Temp = Temp->Next;
+            Temp->Number = i;
+        }
+        Temp->Next = Head;
+    }
+    return(Head);
+}
+
+// Function to delete a node at a given position
+struct Chair *Delete(struct Chair *Head, int pos) {
+
+    struct Chair *Temp = Head, *Prev = NULL;
+
+    if (pos == 1) 
+    {
+        while (Temp->Next != Head) 
+        {
+        Temp = Temp->Next;
+        Temp->Next = Head->Next;
+        free(Head);
+        return Temp->Next;
         }
     }
 
-    if (Temp != NULL)
-    {
-        Temp->Next = Head;
+    int count = 1;
+    while (count < pos && Temp->Next != Head) {
+        Prev = Temp;
+        Temp = Temp->Next;
+        count++;
     }
 
+    if (count == pos) {
+        Prev->Next = Temp->Next;
+        free(Temp);
+    }
+    
     return Head;
 }
 
-int length(struct Chair *Head)
-{
-    if (Head == NULL)
-        return 0;
+// Function to delete first or last node
+struct Chair *DeleteBegorEnd(struct Chair *Head) {
+    if (Head == NULL) return NULL;
 
-    int count = 1;
-    struct Chair *Temp = Head;
-    while (Temp->Next != Head)
-    {
-        count++;
+    struct Chair *Temp = Head, *Prev = NULL;
+
+    while (Temp->Next != Head) {
+        Prev = Temp;
         Temp = Temp->Next;
     }
-    return count;
+
+    if (Prev == NULL) { // Only one node case
+        free(Head);
+        return NULL;
+    }
+
+    Prev->Next = Head;
+    free(Temp);
+    
+    return Head;
 }
 
-void display(struct Chair *Head)
-{
-    if (Head == NULL)
-    {
-        printf("List is empty!\n");
+// Function to print the list
+void Print(struct Chair *Head) {
+    if (Head == NULL) {
+        printf("List is empty.\n");
         return;
     }
 
     struct Chair *Temp = Head;
-    do
-    {
-        printf("Chair Number: %d\n", Temp->Number);
+    do {
+        printf("%d\t", Temp->Number);
         Temp = Temp->Next;
     } while (Temp != Head);
+    printf("\n");
 }
 
-void main()
-{
+int main() {
     struct Chair *Head = NULL;
     int amount;
 
     printf("Enter the amount of Chairs: ");
     scanf("%d", &amount); 
+    Head = Create(Head, amount);
 
-    Head = add(amount, Head);
+    srand(time(0));
 
-    printf("Circular Linked List of Chairs:\n");
-    display(Head);
+    while (amount > 1) {
+        int randomNumber = (rand() % amount) + 1;
+        printf("Removing chair at position: %d\n", randomNumber);
 
-    int randomNumber = (rand() % 10) + 1;
-    
+        if (randomNumber == 1 || randomNumber == amount) {
+            Head = DeleteBegorEnd(Head);
+        } else {
+            Head = Delete(Head, randomNumber);
+        }
 
-    
+        amount--;
+        Print(Head);
+    }
+
+    printf("Last remaining chair: %d\n", Head->Number);
+    free(Head);
+
+    return 0;
 }
