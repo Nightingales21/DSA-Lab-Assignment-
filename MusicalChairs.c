@@ -9,22 +9,22 @@ struct Chair
 };
 
 
-struct Node * Create(struct Chair *Head, int n)
+struct Chair * Create(struct Chair *Head, int n)
 {
-    struct Node *Temp;
+    struct Chair *Temp;
     int Data;
     for(int i=1; i<=n; i++)
     {
         if (Head == NULL)
         {
-            Temp = (struct Node *)malloc(sizeof(struct Node));
+            Temp = (struct Chair *)malloc(sizeof(struct Chair));
             Temp->Number = i;
             Temp->Next = NULL;
             Head = Temp;
         }
         else
         {
-            Temp->Next = (struct Node *)malloc(sizeof(struct Node));
+            Temp->Next = (struct Chair *)malloc(sizeof(struct Chair));
             Temp = Temp->Next;
             Temp->Number = i;
         }
@@ -33,100 +33,76 @@ struct Node * Create(struct Chair *Head, int n)
     return(Head);
 }
 
-// Function to delete a node at a given position
-struct Chair *Delete(struct Chair *Head, int pos) {
+struct Chair * Delete (struct Chair *Head, struct Chair *temp, int pos)
+{
+    temp = Head;
+    struct Chair *tnext;
+    tnext = temp -> Next;
+    for(int i=1; i +1 != pos; i++,temp = temp->Next, tnext = tnext->Next);
+    temp->Next = tnext->Next;
+    return(Head);
+}
 
-    struct Chair *Temp = Head, *Prev = NULL;
+struct Chair * DeleteBeg (struct Chair *Head,struct Chair *temp)
+{
+   
+    for(temp = Head; temp->Next != Head; temp = temp->Next);
+    Head = Head->Next;
+    temp->Next = Head;
+    return(Head);
+}
 
-    if (pos == 1) 
+struct Chair * DeleteEnd(struct Chair *Head,struct Chair *temp)
+{
+    struct Chair *tnext = NULL;
+    for(temp = Head, tnext = temp->Next; tnext->Next != Head; temp = temp->Next, tnext = tnext->Next);
+    temp->Next = Head;
+    free(tnext);
+    return(Head);
+}
+
+struct Chair * Print (struct Chair *Head,struct Chair *temp, int n)
+{
+    temp = Head;
+    for (int i=0; i<n; i++, temp=temp->Next)
     {
-        while (Temp->Next != Head) 
+        if (temp == Head)
         {
-        Temp = Temp->Next;
-        Temp->Next = Head->Next;
-        free(Head);
-        return Temp->Next;
+            printf("\n");
         }
+        printf("%d\t",temp->Data);
     }
-
-    int count = 1;
-    while (count < pos && Temp->Next != Head) {
-        Prev = Temp;
-        Temp = Temp->Next;
-        count++;
-    }
-
-    if (count == pos) {
-        Prev->Next = Temp->Next;
-        free(Temp);
-    }
-    
-    return Head;
-}
-
-// Function to delete first or last node
-struct Chair *DeleteBegorEnd(struct Chair *Head) {
-    if (Head == NULL) return NULL;
-
-    struct Chair *Temp = Head, *Prev = NULL;
-
-    while (Temp->Next != Head) {
-        Prev = Temp;
-        Temp = Temp->Next;
-    }
-
-    if (Prev == NULL) { // Only one node case
-        free(Head);
-        return NULL;
-    }
-
-    Prev->Next = Head;
-    free(Temp);
-    
-    return Head;
-}
-
-// Function to print the list
-void Print(struct Chair *Head) {
-    if (Head == NULL) {
-        printf("List is empty.\n");
-        return;
-    }
-
-    struct Chair *Temp = Head;
-    do {
-        printf("%d\t", Temp->Number);
-        Temp = Temp->Next;
-    } while (Temp != Head);
-    printf("\n");
+    printf("\n");   
+    return(Head);
 }
 
 int main() {
     struct Chair *Head = NULL;
+    struct Chair *Temp = NULL;
     int amount;
 
     printf("Enter the amount of Chairs: ");
     scanf("%d", &amount); 
     Head = Create(Head, amount);
 
-    srand(time(0));
-
-    while (amount > 1) {
-        int randomNumber = (rand() % amount) + 1;
-        printf("Removing chair at position: %d\n", randomNumber);
-
-        if (randomNumber == 1 || randomNumber == amount) {
-            Head = DeleteBegorEnd(Head);
-        } else {
-            Head = Delete(Head, randomNumber);
+    while (amount > 1)
+    {
+        srand(time(0));
+        int randomNumber = (rand() % (amount - 0 + 1)) + 0;
+        if (randomNumber == 0)
+        {
+            DeleteBeg(Head, Temp);
         }
-
+        else if (randomNumber == amount)
+        {
+            DeleteEnd(Head, Temp);
+        }
+        else
+        {
+            Delete(Head, Temp, randomNumber);
+        }
         amount--;
-        Print(Head);
+        Print(Head, Temp, amount);
     }
-
-    printf("Last remaining chair: %d\n", Head->Number);
-    free(Head);
-
-    return 0;
+    
 }
