@@ -1,148 +1,288 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node 
+struct node 
 {
-    int Data;
-    struct Node *Next;
-    struct Node *Previous;
+    struct node *prev;
+    int data;
+    struct node *next;
 };
 
-struct Node *Create(struct Node *Head, struct Node *Tail, int n) 
+struct node *create(struct node *head, struct node *tail, int n)
 {
-    struct Node *Temp = NULL;
-    int data;
+    struct node *temp;
+    int i;
+    int value;
 
-    for (int i = 0; i < n; i++) 
+    printf("\n");
+
+    for (i = 0; i < n; i++) 
     {
-        struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+        printf("Enter data for element %d: ", i + 1);
+        scanf("%d", &value);
 
-        printf("Enter data %d: ", i + 1);
-        scanf("%d", &data);
+        struct node *newNode = (struct node *)malloc(sizeof(struct node));
+        newNode->data = value;
+        newNode->next = NULL;
 
-        newNode->Data = data;
-        newNode->Next = NULL;
-        newNode->Previous = NULL;
-
-        if (Head == NULL) 
-        {  
-            Head = newNode;
-            Tail = newNode;
+        if (head == NULL) 
+        {
+            newNode->prev = NULL;
+            head = newNode;
+            tail = newNode;
         } 
         else 
         {
-            Tail->Next = newNode;
-            newNode->Previous = Tail;
-            Tail = newNode;
+            newNode->prev = tail;
+            tail->next = newNode;
+            tail = newNode;
         }
     }
-    return Head;  
+
+    return head;
 }
 
-void Print(struct Node *Head) 
+void print_from_head(struct node *head)
 {
-    struct Node *Temp = Head;
+    struct node *temp;
 
-    printf("Doubly Linked List: ");
-    while (Temp != NULL) 
+    for (temp = head; temp != NULL; temp = temp->next) 
     {
-        printf("%d ", Temp->Data);
-        Temp = Temp->Next;
+        printf("%d\n", temp->data);
     }
-    printf("\n");
 }
 
-struct Node * InsertBeg(struct Node *Head)
+void print_from_tail(struct node *tail)
 {
-    struct Node *Temp = NULL;
-    int data;
-    Temp = (struct Node *)malloc(sizeof(struct Node));
-    printf("Enter data: ");
-    scanf("%d", &data);
-    Temp->Previous = NULL;
-    Temp->Data=data;
-    Temp->Next = Head;
-    Head->Previous = Temp;
-    Head = Temp;
-    return Head;
-}
+    struct node *temp;
 
-struct Node *Insert(struct Node *Head, int pos) 
-{
-    struct Node *NN = (struct Node *)malloc(sizeof(struct Node));
-
-    printf("Enter data: ");
-    int data;
-    scanf("%d", &data);
-    NN->Data = data;
-    NN->Next = NULL;
-    NN->Previous = NULL;
-
-    for (i = 0; Temp != NULL && i < pos - 1; i++) 
+    for (temp = tail; temp != NULL; temp = temp->prev) 
     {
-        Temp = Temp->Next;
+        printf("%d\n", temp->data);
+    }
+}
+
+struct node *insert_front(struct node *head, int value)
+{
+    struct node *newNode;
+
+    newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->prev = NULL;
+    newNode->data = value;
+    newNode->next = head;
+
+    if (head != NULL) 
+    {
+        head->prev = newNode;
     }
 
-    NN->Next = Temp->Next;
-    NN->Previous = Temp;
-    
+    head = newNode;
 
-    Temp->Next = NN;
-
-    return Head;
+    return head;
 }
 
+struct node *insert_middle(struct node *head, int position, int value)
+{
+    int count;
+    struct node *temp;
+    struct node *newNode;
 
-int main() {
-    int flag = 0, option, n;
-    struct Node *Head = NULL;
-    struct Node *Tail = NULL;
+    count = 1;
+    temp = head;
 
-    while (flag == 0) {
-        printf("DLL Menu: \n");
-        printf("1: Create\n");
-        printf("2: Print\n");
-        printf("3: Insert Begininng\n");
-        printf("4: Insert Middle\n");
-        printf("5: Insert End\n");
-        printf("6: Delete Begininng\n");
-        printf("7: Delete Middle\n");
-        printf("8: Delete End\n");
-        printf("9: Exit\n");
-        printf("Choose Option: ");
+    while (count < position - 1 && temp->next != NULL) 
+    {
+        temp = temp->next;
+        count += 1;
+    }
+
+    newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = value;
+    newNode->next = temp->next;
+    newNode->prev = temp;
+
+    if (temp->next != NULL) 
+    {
+        temp->next->prev = newNode;
+    }
+
+    temp->next = newNode;
+
+    return head;
+}
+
+struct node *insert_end(struct node *tail, int value)
+{
+    struct node *newNode;
+
+    newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->prev = tail;
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (tail != NULL) 
+    {
+        tail->next = newNode;
+    }
+
+    tail = newNode;
+
+    return tail;
+}
+
+struct node *delete_front(struct node *head)
+{
+    if (head == NULL) 
+    {
+        return NULL;
+    }
+
+    struct node *temp = head;
+    head = head->next;
+
+    if (head != NULL) 
+    {
+        head->prev = NULL;
+    }
+
+    free(temp);
+    return head;
+}
+
+struct node *delete_middle(struct node *head, int value)
+{
+    struct node *temp;
+
+    for (temp = head; temp != NULL; temp = temp->next) 
+    {
+        if (temp->data == value) 
+        {
+            if (temp->prev != NULL) 
+            {
+                temp->prev->next = temp->next;
+            } 
+            else 
+            {
+                head = temp->next;
+            }
+
+            if (temp->next != NULL) 
+            {
+                temp->next->prev = temp->prev;
+            }
+
+            free(temp);
+            break;
+        }
+    }
+
+    return head;
+}
+
+struct node *delete_end(struct node *tail)
+{
+    if (tail == NULL) 
+    {
+        return NULL;
+    }
+
+    struct node *temp = tail;
+    tail = tail->prev;
+
+    if (tail != NULL) 
+    {
+        tail->next = NULL;
+    }
+
+    free(temp);
+    return tail;
+}
+
+int main()
+{
+    int option;
+    int value;
+    int n;
+    int position;
+
+    struct node *head;
+    struct node *tail;
+
+    head = NULL;
+    tail = NULL;
+
+    int running;
+    running = 1;
+
+    while (running != 0) 
+    {
+        printf("\n\n1. Enter list\n");
+        printf("2. Print list\n");
+        printf("3. Insert at beginning\n");
+        printf("4. Insert in middle\n");
+        printf("5. Insert at end\n");
+        printf("6. Delete from beginning\n");
+        printf("7. Delete in middle\n");
+        printf("8. Delete from end\n");
+        printf("9. Exit\n");
+        printf("\nEnter choice: ");
+
         scanf("%d", &option);
 
-        switch (option) {
+        switch (option) 
+        {
             case 1:
-                printf("Enter the number of Nodes to Create: ");
+                printf("\nEnter number of elements: ");
                 scanf("%d", &n);
-                Head = Create(Head, Tail, n);  
+                head = create(head, tail, n);
                 break;
 
             case 2:
-                Print(Head);
+                printf("\nThrough head: \n");
+                print_from_head(head);
+                printf("\nThrough tail: \n");
+                print_from_tail(tail);
                 break;
 
             case 3:
-               Head = InsertBeg(Head);
+                printf("Enter new node value: ");
+                scanf("%d", &value);
+                head = insert_front(head, value);
                 break;
 
             case 4:
-                
-                printf("Enter position: ");
-                int pos;
-                scanf("%d", &pos);
-                Head = Insert(Head, pos);
+                printf("Enter new node value: ");
+                scanf("%d", &value);
+                printf("Enter new node position: ");
+                scanf("%d", &position);
+                head = insert_middle(head, position, value);
+                break;
+
+            case 5:
+                printf("Enter new node value: ");
+                scanf("%d", &value);
+                tail = insert_end(tail, value);
+                break;
+
+            case 6:
+                head = delete_front(head);
+                break;
+
+            case 7:
+                printf("Enter node data: ");
+                scanf("%d", &value);
+                head = delete_middle(head, value);
+                break;
+
+            case 8:
+                tail = delete_end(tail);
                 break;
 
             case 9:
-                flag = 1;
-                printf("Exiting...\n");
+                running = 0;
                 break;
-
-            default:
-                printf("Invalid Option! Try again.\n");
         }
     }
+
     return 0;
 }
