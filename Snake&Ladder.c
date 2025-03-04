@@ -84,7 +84,7 @@ struct Node *movePlayer(struct Node *head, struct Node *player, int diceRoll) {
     return player;
 }
 
-=
+
 void playGame(struct Node *head) {
     struct Node *player = head;  
     srand(time(0));  
