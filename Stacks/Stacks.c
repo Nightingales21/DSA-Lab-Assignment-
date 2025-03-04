@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node 
+struct Stack 
 {
     int Data;
-    struct Node *Next;
-    struct Node *Prev;
+    struct Stack *Next;
+    struct Stack *Prev;
 };
 
-struct Node * push(struct Node *Top, int i)
+struct Stack * push(struct Stack *Top, int i)
 {
-    struct Node *Temp;
+    struct Stack *Temp;
     int data;
     if (Top == NULL)
     {
-        Temp = (struct Node *)malloc(sizeof(struct Node));
+        Temp = (struct Stack *)malloc(sizeof(struct Stack));
         printf("Enter data %d:", i+1);
         scanf("%d",&data);
         Temp->Data = data;
@@ -24,7 +24,7 @@ struct Node * push(struct Node *Top, int i)
     }
     else
     {
-        Temp = (struct Node *)malloc(sizeof(struct Node));
+        Temp = (struct Stack *)malloc(sizeof(struct Stack));
         printf("Enter data %d: ", i + 1);
         scanf("%d", &data); 
         Temp->Data = data;  
@@ -36,7 +36,7 @@ struct Node * push(struct Node *Top, int i)
     return Top;
 }
 
-struct Node * pop(struct Node *Top)
+struct Stack * pop(struct Stack *Top)
 {
     Top = Top->Next;
     free(Top->Prev);
@@ -44,14 +44,14 @@ struct Node * pop(struct Node *Top)
     return(Top);
 }
 
-void Peek(struct Node *Top)
+void Peek(struct Stack *Top)
 {
     printf("the data at Top is: %d", Top->Data);
 }
 
-void Print(struct Node *Top)
+void Print(struct Stack *Top)
 {
-    struct Node *Temp = NULL;
+    struct Stack *Temp = NULL;
     for (Temp = Top; Temp->Next != NULL; Temp=Temp->Next)
     {
         printf("%d\t", Temp->Data);
@@ -61,7 +61,7 @@ void Print(struct Node *Top)
 
 void main()
 {
-    struct Node *Top = NULL;
+    struct Stack *Top = NULL;
     int flag = 0, option,j;
     while (flag == 0)
     {
