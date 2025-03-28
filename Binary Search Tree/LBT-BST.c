@@ -1,125 +1,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+struct Node 
+{
     int Data;
     struct Node *Left;
     struct Node *Right;
 };
 
-// Simple queue implementation
-#define MAX_SIZE 50
-int Queue[MAX_SIZE];
-int front = -1, rear = -1;
 
-void Enqueue(int data) {
-    if (rear == MAX_SIZE - 1) {
-        printf("Queue is full!\n");
-        return;
-    }
-    if (front == -1) front = 0; // First element
-    rear++;
-    Queue[rear] = data;
-    printf("Enqueued %d\n", data);
-}
-
-int Dequeue() {
-    if (front == -1 || front > rear) {
-        printf("Queue is empty!\n");
-        return -1;
-    }
-    int data = Queue[front];
-    front++;
-    return data;
-}
-
-int isEmpty() {
-    return (front == -1 || front > rear);
-}
-
-struct Node *Create(struct Node *Root, int data) {
+struct Node *Create(struct Node *Root, int data)
+{
     struct Node *Temp = (struct Node *)malloc(sizeof(struct Node));
     Temp->Data = data;
     Temp->Left = NULL;
     Temp->Right = NULL;
 
-    if (Root == NULL) {
+    if (Root == NULL)
+    {
         return Temp;
     }
-    if (data < Root->Data) {
+    
+    if (Root->Data > data)
         Root->Left = Create(Root->Left, data);
-    } else {
+    else
         Root->Right = Create(Root->Right, data);
-    }
+
     return Root;
 }
 
-void LevelOrderTraversal(struct Node *Root) {
-    if (Root == NULL) {
-        printf("Tree is empty!\n");
-        return;
-    }
-    Enqueue(Root->Data);
-    struct Node *currentQueue[MAX_SIZE]; // Queue for node pointers
-    int nodeFront = -1, nodeRear = -1;
-    currentQueue[++nodeRear] = Root;
 
-    while (!isEmpty()) {
-        int data = Dequeue(); // Dequeue the data
-        printf("%d ", data);
-
-        // Get the corresponding node
-        struct Node *current = currentQueue[++nodeFront];
-
-        // Enqueue left child
-        if (current->Left != NULL) {
-            Enqueue(current->Left->Data);
-            currentQueue[++nodeRear] = current->Left;
-        }
-
-        // Enqueue right child
-        if (current->Right != NULL) {
-            Enqueue(current->Right->Data);
-            currentQueue[++nodeRear] = current->Right;
-        }
-    }
-    printf("\n");
+void Enqueue(struct Node* Q[], struct Node* node, int *rear)
+{
+    Q[(*rear)++] = node;
 }
 
-void main() {
-    struct Node *Root = NULL;
-    int option, n, data;
+struct Node* Dequeue(struct Node* Q[], int *front)
+{
+    return Q[(*front)++];
+}
 
-    while (1) {
-        printf("\nBinary Search Tree Menu!\n");
-        printf("1: Create BST\n");
-        printf("2: BFS (Level Order Traversal)\n");
-        printf("3: Exit\n");
-        printf("Choose option: ");
-        scanf("%d", &option);
+int isEmpty(int front, int rear)
+{
+    return front == rear;
+}
 
-        switch (option) {
-            case 1:
-                printf("Number of Nodes: ");
-                scanf("%d", &n);
-                for (int i = 0; i < n; i++) {
-                    printf("Enter Data for Node %d: ", i + 1);
-                    scanf("%d", &data);
-                    Root = Create(Root, data);
-                }
-                break;
 
-            case 2:
-                printf("Level Order Traversal: ");
-                LevelOrderTraversal(Root);
-                break;
+void LBT(struct Node *Root)
+{
+    if (Root == NULL) return;
 
-            case 3:
-                printf("Exiting...\n");
-                return 0;
+    struct Node* Q[50]; 
+    int front = 0, rear = 0; 
 
-            default:
-                printf("Invalid option!\n");
-        }
+    
+    Enqueue(Q, Root, &rear);
+
+    while (!isEmpty(front, rear))
+    {
+        struct Node* current = Dequeue(Q, &front);
+        printf("%d ", current->Data);
+
+        if (current->Left)
+            Enqueue(Q, current->Left, &rear);
+        
+        if (current->Right)
+            Enqueue(Q, current->Right, &rear);
     }
+}
+
+
+int main()
+{
+    struct Node *Root = NULL;
+    int n, data;
+
+    printf("Number of Nodes in BST: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("Enter Data for Node %d: ", i + 1);
+        scanf("%d", &data);
+        Root = Create(Root, data);
+    }
+
+    printf("\nLevel-Order Traversal: ");
+    LBT(Root);
+    printf("\n");
+
+    return 0;
 }
