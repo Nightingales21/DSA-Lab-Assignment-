@@ -38,11 +38,12 @@ void main()
     int dataset[100];
     for (int i = 0; i<100; i++)
     {
-        dataset[i] = rand() % 100 +1;
+        dataset[i] = i;
+        //dataset[i] = rand() % 100 +1;
     }
     Insert(Hash_Table, dataset);
     for (int i=0; i<100; i++)
     {
-        printf("%d\t", Hash_Table[i]);
+        printf("%d\n", Hash_Table[i]);
     }
 }
